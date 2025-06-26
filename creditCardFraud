@@ -55,3 +55,25 @@ def tuneHyperparameters(X_train, y_train):
     grid.fit(X_train, y_train)
     print("\nBest Random Forest Params:", grid.best_params_)
     return grid.best_estimator_
+
+
+def main():
+    filePath = "creditcard.csv"  # Replace with your path
+    X, y = loadAndPreprocessData(filePath)
+
+    X_resampled, y_resampled = balanceDataset(X, y)
+    X_train, X_test, y_train, y_test = train_test_split(
+        X_resampled, y_resampled, test_size=0.3, random_state=42)
+
+    trainAndEvaluateModel(X_train, X_test, y_train, y_test)
+
+    # Optional: fine-tune Random Forest
+    tuned_rf = tuneHyperparameters(X_train, y_train)
+    y_pred = tuned_rf.predict(X_test)
+    print("\nTuned Random Forest Evaluation:")
+    print(confusion_matrix(y_test, y_pred))
+    print(classification_report(y_test, y_pred, digits=4))
+
+
+if __name__ == "__main__":
+    main()
