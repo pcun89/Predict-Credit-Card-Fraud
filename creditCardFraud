@@ -1,0 +1,21 @@
+import pandas as pd
+import numpy as np
+from sklearn.model_selection import train_test_split, GridSearchCV
+from sklearn.preprocessing import StandardScaler
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import classification_report, confusion_matrix
+from imblearn.over_sampling import SMOTE
+
+def loadAndPreprocessData(filePath):
+    df = pd.read_csv(filePath)
+    print("Initial class distribution:\n", df['Class'].value_counts())
+
+    X = df.drop('Class', axis=1)
+    y = df['Class']
+
+    # Standardize 'Amount' and 'Time' columns
+    X['Amount'] = StandardScaler().fit_transform(X['Amount'].values.reshape(-1, 1))
+    X['Time'] = StandardScaler().fit_transform(X['Time'].values.reshape(-1, 1))
+
+    return X, y
