@@ -29,3 +29,24 @@ def balanceDataset(X, y):
     return X_resampled, y_resampled
 
 
+def trainAndEvaluateModel(X_train, X_test, y_train, y_test):
+    models = {
+        'Logistic Regression': LogisticRegression(max_iter=1000),
+        'Random Forest': RandomForestClassifier()
+    }
+
+    for name, model in models.items():
+        model.fit(X_train, y_train)
+        y_pred = model.predict(X_test)
+
+        print(f"\n{name} Evaluation:")
+        print(confusion_matrix(y_test, y_pred))
+        print(classification_report(y_test, y_pred, digits=4))
+
+
+def tuneHyperparameters(X_train, y_train):
+    param_grid = {
+        'n_estimators': [100, 200],
+        'max_depth': [None, 10, 20],
+        'min_samples_split': [2, 5]
+    }
